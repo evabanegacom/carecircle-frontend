@@ -53,6 +53,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .nav-links a:hover, .nav-links .nav-active { color: var(--teal); }
 .header-actions { display: flex; align-items: center; gap: 22px; }
 .login-link { min-height: 44px; padding: 0 3px; border: 0; background: none; color: #53645d; font-size: 13px; }
+.unread-badge,.nav-notification-count { display:inline-grid; place-items:center; min-width:18px; height:18px; padding:0 5px; border-radius:999px; color:#fff; background:#c96e54; font-size:10px; font-weight:700; line-height:1; }
+.nav-notification-count { position:absolute; top:1px; left:calc(50% + 4px); }
+.bottom-nav button { position:relative; }
 .button { min-height: 48px; padding: 0 20px; border: 1px solid transparent; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px; font-weight: 600; transition: transform .18s ease, background .18s ease, box-shadow .18s ease; }
 .button:hover { transform: translateY(-1px); }
 .button-teal { color: white; background: var(--teal); box-shadow: 0 5px 13px #176c6020; }
