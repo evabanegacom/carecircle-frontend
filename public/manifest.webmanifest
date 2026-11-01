@@ -1,0 +1,13 @@
+{
+  "name": "PeerCare",
+  "short_name": "PeerCare",
+  "description": "A caring community sharing real recovery experiences.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#faf8f5",
+  "theme_color": "#faf8f5",
+  "icons": [
+    { "src": "/peercare-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
