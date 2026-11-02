@@ -26,6 +26,8 @@ async function api<T=any>(path:string, options:RequestInit={}) {
   const tokenResponse=await fetch(`${API}/auth/csrf`,{credentials:'include',cache:'no-store'})
   if(tokenResponse.ok){headers.set('X-XSRF-TOKEN',(await tokenResponse.json()).token);response=await send();data=await response.json().catch(()=>null)}
  }
+ if(response.ok&&response.status!==204&&!response.headers.get('content-type')?.toLowerCase().includes('json'))
+  throw new Error('The API is not connected to this deployment yet. Please try again later.')
  if(!response.ok)throw new Error(data?.message||data?.title||`Request failed (${response.status})`)
  return data as T
 }
@@ -84,7 +86,7 @@ export default function App(){
  async function acceptConsent(accepted:boolean){try{await api('/me/consent',{method:'POST',body:JSON.stringify({accepted,emailNotifications:true,inAppNotifications:true})});setConsent(null);if(!accepted){setUser(null);setPendingAction(null);toast('You can still explore public stories.')}else{continuePending();toast('Consent saved.')}}catch(e){toast(err(e))}}
  async function saveOnboarding(e:FormEvent){e.preventDefault();const fd=new FormData(e.currentTarget as HTMLFormElement);try{await api('/me/onboarding',{method:'PUT',body:JSON.stringify({displayName:fd.get('displayName'),state:fd.get('state'),city:fd.get('city'),conditions:[]})});const d=await api<{user:User}>('/auth/me').catch(()=>null);setUser(d?.user||{...user!,displayName:String(fd.get('displayName')),needsOnboarding:false});setOnboarding(false);if(!consent)continuePending();toast(consent?'Profile saved. Please review the consent to continue.':'Your profile is ready.')}catch(e){toast(err(e))}}
  function needAuth(action:()=>void){if(!user){setPendingAction(()=>action);setAuthOpen(true);return}action()}
- async function refreshConditions(){try{const list=await api<Condition[]>('/conditions');setConditions(list);return list}catch(e){toast(err(e));return []}}
+ async function refreshConditions(){try{const list=await api<Condition[]>('/conditions');const available=Array.isArray(list)?list:[];setConditions(available);return available}catch(e){toast(err(e));setConditions([]);return []}}
  function startCompose(k:'resolution'|'experience'|'question'){needAuth(()=>{void(async()=>{const available=conditions.length?conditions:await refreshConditions();if(!available.length){toast('No topics are available yet. Ask an admin to add topics in Moderation → Options.');return}setForm({...form,kind:k,conditionId:available.find(item=>item.id===condition)?.id||available[0].id,title:term?`About ${term}`:'',treatments:[],facilities:[]});setCompose(k)})()})}
  async function publish(e:FormEvent){e.preventDefault();try{const d=await api<any>('/posts',{method:'POST',body:JSON.stringify({...form,conditionId:form.conditionId||conditions[0]?.id,kind:compose})});setCompose(null);toast(d.message);await loadPosts();if(d.post?.status==='published')void openPost(d.post.id)}catch(e){toast(err(e))}}
  async function postAction(id:string,action:'helped'|'thank'|'save'){try{if(action!=='save')await api(`/posts/${id}/reactions`,{method:'POST',body:JSON.stringify({kind:action==='helped'?'helped_me_too':'thank_you'})});else await api(`/posts/${id}/save`,{method:'POST'});await loadPosts();if(detail?.post.id===id)await openPost(id)}catch(e){toast(err(e));if(!user)setAuthOpen(true)}}
