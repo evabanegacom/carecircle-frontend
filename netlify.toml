@@ -1,4 +1,28 @@
 [[redirects]]
+  from = "/api/*"
+  to = "https://peercare-api.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/story/*"
+  to = "https://peercare-api.onrender.com/story/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "https://peercare-api.onrender.com/sitemap.xml"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/robots.txt"
+  to = "https://peercare-api.onrender.com/robots.txt"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
