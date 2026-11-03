@@ -1412,14 +1412,12 @@ footer { padding-top: 24px; padding-bottom: 24px; }
   .hero-sub { font-size: 16px; }
   .hero-art { min-height: 350px; border-radius: 25px 72px 25px 72px; background-position: center; }
   .hero-visual-label { top: 13px; left: 13px; padding: 8px 10px; font-size: 10px; }
-  .hero-story-preview { bottom: 14px; left: 12px; width: 73%; padding: 14px; }
-  .hero-story-preview h3 { margin: 8px 0 5px; font-size: 21px; }
-  .hero-story-preview p { font-size: 14px; }
-  .preview-divider { margin: 9px 0 8px; }
-  .hero-float-card { gap: 6px; padding: 7px 9px; }
-  .hero-float-card .float-icon { width: 27px; height: 27px; }
-  .float-topic { top: 58px; right: -1px; }
-  .float-privacy { top: 112px; right: -1px; bottom: auto; }
+  .hero-story-preview { bottom: 13px; left: 13px; width: calc(100% - 26px); padding: 13px 15px; }
+  .hero-story-preview h3 { margin: 8px 0 5px; font-size: 19px; line-height: 1.12; }
+  .hero-story-preview p { font-size: 12px; }
+  .preview-divider { margin: 8px 0 7px; }
+  /* Keep the illustration readable on phones by removing the two extra overlays. */
+  .hero-float-card { display: none; }
   .trust-strip { padding-inline: 15px; }
   .trust-strip > div { gap: 12px; }
   #search-panel.stories-section { padding-top: 58px; padding-bottom: 60px; }
