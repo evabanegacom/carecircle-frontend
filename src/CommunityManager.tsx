@@ -1,11 +1,13 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Check, Plus, Trash2 } from 'lucide-react'
+import { trackApiRequest } from './apiActivity'
 
 type Condition = { id:string; name:string; active:boolean }
 type Community = { id:string; name:string; slug:string; description:string; guidelines:string; status:'active'|'inactive'; conditionId:string|null; condition?:string|null; memberCount:number }
 type Draft = Pick<Community,'name'|'slug'|'description'|'guidelines'|'status'|'conditionId'>
 
-async function adminApi<T=any>(path:string, options:RequestInit={}) {
+function adminApi<T=any>(path:string, options:RequestInit={}) {
+ return trackApiRequest(async()=>{
  const method=(options.method||'GET').toUpperCase(),headers=new Headers(options.headers)
  if(options.body)headers.set('Content-Type','application/json')
  if(!['GET','HEAD','OPTIONS'].includes(method)){
@@ -17,6 +19,7 @@ async function adminApi<T=any>(path:string, options:RequestInit={}) {
  const data=await response.json().catch(()=>null)
  if(!response.ok)throw new Error(data?.message||data?.title||`Request failed (${response.status})`)
  return data as T
+ })
 }
 
 const blank:Draft={name:'',slug:'',description:'',guidelines:'Share personal experiences with care. Do not ask members to diagnose or prescribe. Avoid identifying details, medication doses, and urgent-care requests. Talk with a qualified health professional about personal medical decisions.',status:'active',conditionId:null}

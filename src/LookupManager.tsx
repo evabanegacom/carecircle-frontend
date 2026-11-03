@@ -1,9 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Check, Plus } from 'lucide-react'
+import { trackApiRequest } from './apiActivity'
 
 type ManagedCondition = { id:string; name:string; slug:string; category:string; active:boolean }
 
-async function adminApi<T=any>(path:string, options:RequestInit={}) {
+function adminApi<T=any>(path:string, options:RequestInit={}) {
+ return trackApiRequest(async()=>{
  const method=(options.method||'GET').toUpperCase(),headers=new Headers(options.headers)
  if(options.body)headers.set('Content-Type','application/json')
  if(!['GET','HEAD','OPTIONS'].includes(method)){
@@ -15,6 +17,7 @@ async function adminApi<T=any>(path:string, options:RequestInit={}) {
  const data=await response.json().catch(()=>null)
  if(!response.ok)throw new Error(data?.message||data?.title||`Request failed (${response.status})`)
  return data as T
+ })
 }
 
 export default function LookupManager({toast,changed}:{toast:(message:string)=>void;changed:()=>void}){
